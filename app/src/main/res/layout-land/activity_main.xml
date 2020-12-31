@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal|center_vertical"
     android:foregroundGravity="center_vertical|center_horizontal"
+    android:padding="0dp"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -23,11 +24,10 @@
         android:id="@+id/linearLayout"
         style="@style/Theme.MaterialComponents.DayNight"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -40,34 +40,21 @@
             android:ems="10"
             android:gravity="center"
             android:inputType="textPersonName"
-            android:text="Name"
             android:textColor="@color/colorSecondary"
             android:textSize="35sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <Button
-            android:id="@+id/two"
-            style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/ripple_effect"
-            android:text="@string/_2"
-            android:textColor="@android:color/white"
-            android:textSize="25sp" />
 
         <Button
             android:id="@+id/one"
@@ -78,6 +65,18 @@
             android:layout_weight="1"
             android:background="@drawable/ripple_effect"
             android:text="@string/_1"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/two"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_effect"
+            android:text="@string/_2"
             android:textColor="@android:color/white"
             android:textSize="25sp" />
 
@@ -106,18 +105,6 @@
             android:textColorLink="@android:color/white"
             android:textSize="25sp"
             app:backgroundTint="#FFFFFF" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <Button
             android:id="@+id/five"
@@ -143,6 +130,19 @@
             android:textColor="@android:color/white"
             android:textSize="25sp" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
         <Button
             android:id="@+id/seven"
             style="@style/ButtonStyle"
@@ -167,19 +167,6 @@
             android:textColor="@android:color/white"
             android:textColorLink="@android:color/white"
             android:textSize="25sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <Button
             android:id="@+id/nine"
@@ -229,18 +216,23 @@
             android:textColor="@android:color/white"
             android:textColorLink="@android:color/white"
             android:textSize="25sp" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout5"
+        android:id="@+id/linearLayout6"
+        style="@style/ButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
         <Button
             android:id="@+id/plus"
@@ -290,21 +282,6 @@
             android:textColor="@android:color/white"
             android:textColorLink="@android:color/white"
             android:textSize="25sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        style="@style/ButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
         <Button
             android:id="@+id/dot"
@@ -324,7 +301,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="4"
             android:background="@drawable/ripple_effect"
             android:text="@string/equal"
             android:textColor="@android:color/white"

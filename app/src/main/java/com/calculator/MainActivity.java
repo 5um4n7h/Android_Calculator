@@ -1,6 +1,7 @@
 package com.calculator;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,6 +9,9 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     EditText ans;
     boolean add,subtract,mul,devides;
 
-
+    Toolbar toolbar;
 
 
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -29,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar.setTitle(getString(R.string.app_name));
+
+		//getSupportActionBar().setTitle(Html.fromHtml("<font color=\"white\">"+getString(R.string.app_name)+"</font>"));
+
 
 		one = (Button) findViewById(R.id.one);
 		two = (Button) findViewById(R.id.two);
@@ -256,6 +267,24 @@ public class MainActivity extends AppCompatActivity {
 		});
 
 	 */
+
+		ans.setEnabled(false);
+		ans.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				ans.setSelection(ans.getText().length());
+			}
+		});
 	}
 
 
