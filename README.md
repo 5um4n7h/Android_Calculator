@@ -1,2 +1,2 @@
 # Calculator
-A simple calculator with minimal functionalies for android
+A simple calculator with minimal functionalities for android
