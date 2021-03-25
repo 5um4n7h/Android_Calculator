@@ -145,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
 		equal.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-                    res2 =Float.parseFloat(ans.getText()+"");
+
+
+                    res2 =Float.parseFloat(String.valueOf(ans.getText()));
                     if(add==true){
                     	ans.setText(res1+res2+" ");
                     	add=false;
@@ -163,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
 					devides=false;
 				}
 
+
+
 			}
 		});
 
@@ -175,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 					else {
 					res1 = Float.parseFloat(ans.getText()+" ");
 					add = true;
-					ans.setText(null);
+					ans.setText("");
 
 					}
 
