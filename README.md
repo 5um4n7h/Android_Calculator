@@ -1,6 +1,6 @@
 # Calculator
 
-A simple calculator with minimal functionalities for android. <br>
+A simple calculator to perfom basic arithmetic operations for android. <br>
 Dark mode enabled.<br>
 Landscape View Supported.<br>
 
