@@ -1,31 +1,122 @@
 package com.calculator;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.RippleDrawable;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
+
 import android.text.TextWatcher;
-import android.view.MotionEvent;
+import android.util.DisplayMetrics;
+import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.Float;
 
-public class MainActivity extends AppCompatActivity {
-	Button one,two,three,four,five,six,seven,eight,nine,zero,equal,plus,minus,multiply,devide,dot,backspace,clear;
-	float res1,res2;
-    EditText ans;
-    boolean add,subtract,mul,devides;
+import java.util.Stack;
 
-    Toolbar toolbar;
+public class MainActivity extends AppCompatActivity {
+	Button one, two, three, four, five, six, seven, eight, nine, zero, equal, plus, minus, multiply, devide, dot, backspace, clear;
+
+	EditText ans;
+	TextView display;
+
+	Toolbar toolbar;
+	Boolean equalFalg = false;
+
+
+
+
+
+	public int evaluate(@NotNull String expression) {
+		char[] tokens = expression.toCharArray();
+		Stack<Integer> values = new Stack<>();
+		Stack<Character> ops = new Stack<>();
+
+		for (int i = 0; i < tokens.length; i++) {
+			if (tokens[i] >= '0' &&
+					tokens[i] <= '9') {
+				StringBuilder sbuf = new
+						StringBuilder();
+
+				while (i < tokens.length &&
+						tokens[i] >= '0' &&
+						tokens[i] <= '9')
+					sbuf.append(tokens[i++]);
+				values.push(Integer.parseInt(sbuf.
+						toString()));
+				i--;
+			}
+
+			else if (tokens[i] == '(')
+				ops.push(tokens[i]);
+			else if (tokens[i] == ')') {
+				while (ops.peek() != '(')
+					values.push(applyOp(ops.pop(),
+							values.pop(),
+							values.pop()));
+				ops.pop();
+			}
+
+			else if (tokens[i] == '+' ||
+					tokens[i] == '-' ||
+					tokens[i] == '*' ||
+					tokens[i] == '/') {
+				while (!ops.empty() &&
+						hasPrecedence(tokens[i],
+								ops.peek()))
+					values.push(applyOp(ops.pop(),
+							values.pop(),
+							values.pop()));
+
+				ops.push(tokens[i]);
+			}
+		}
+
+		while (!ops.empty())
+			values.push(applyOp(ops.pop(),
+					values.pop(),
+					values.pop()));
+
+		return values.pop();
+	}
+
+	public boolean hasPrecedence(
+			char op1, char op2) {
+
+		return (op1 != '*' && op1 != '/') ||
+				(op2 != '+' && op2 != '-');
+	}
+
+	public int applyOp(char op,
+	                   int b, int a) {
+		switch (op) {
+			case '+':
+				return a + b;
+			case '-':
+				return a - b;
+			case '*':
+				return a * b;
+			case '/':
+				if (b == 0)
+					throw new
+							UnsupportedOperationException(
+							"Cannot divide by zero");
+				return a / b;
+		}
+		return 0;
+	}
 
 
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -34,41 +125,48 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		final DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		int height = displayMetrics.heightPixels;
+		int width = displayMetrics.widthPixels;
+		if (height < 1280 || width < 720) {
+			Toast.makeText(this, "Screen Size not supporetd", Toast.LENGTH_LONG).show();
+		}
 
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(getString(R.string.app_name));
 
 		//getSupportActionBar().setTitle(Html.fromHtml("<font color=\"white\">"+getString(R.string.app_name)+"</font>"));
 
 
-		one = (Button) findViewById(R.id.one);
-		two = (Button) findViewById(R.id.two);
-		three= (Button) findViewById(R.id.three);
-		four = (Button) findViewById(R.id.four);
-		five = (Button) findViewById(R.id.five);
-		six = (Button) findViewById(R.id.six);
-		seven = (Button) findViewById(R.id.seven);
-		eight = (Button) findViewById(R.id.eight);
-		nine = (Button) findViewById(R.id.nine);
-		zero = (Button) findViewById(R.id.zero);
-		equal = (Button) findViewById(R.id.equal);
-		plus = (Button) findViewById(R.id.plus);
-		minus = (Button) findViewById(R.id.minus);
-		multiply = (Button) findViewById(R.id.multiply);
-		devide = (Button) findViewById(R.id.devide);
-		equal = (Button) findViewById(R.id.equal);
-		dot =  (Button)findViewById(R.id.dot);
-		ans = (EditText) findViewById(R.id.ans);
-		backspace = (Button) findViewById(R.id.backspace);
-		clear = (Button) findViewById(R.id.errase);
-
-
+		one = findViewById(R.id.one);
+		two = findViewById(R.id.two);
+		three = findViewById(R.id.three);
+		four = findViewById(R.id.four);
+		five = findViewById(R.id.five);
+		six = findViewById(R.id.six);
+		seven = findViewById(R.id.seven);
+		eight = findViewById(R.id.eight);
+		nine = findViewById(R.id.nine);
+		zero = findViewById(R.id.zero);
+		equal = findViewById(R.id.equal);
+		plus = findViewById(R.id.plus);
+		minus = findViewById(R.id.minus);
+		multiply = findViewById(R.id.multiply);
+		devide = findViewById(R.id.devide);
+		equal = findViewById(R.id.equal);
+		dot = findViewById(R.id.dot);
+		ans = findViewById(R.id.ans);
+		backspace = findViewById(R.id.backspace);
+		clear = findViewById(R.id.errase);
+		display = findViewById(R.id.display);
 
 
 		one.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"1");
+				ans.setText(ans.getText() + "1");
 
 
 			}
@@ -76,68 +174,85 @@ public class MainActivity extends AppCompatActivity {
 		});
 
 		two.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"2");
+				ans.setText(ans.getText() + "2");
+
 			}
 		});
 
 		three.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"3");
+				ans.setText(ans.getText() + "3");
+
 			}
 		});
 
 		four.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"4");
+				ans.setText(ans.getText() + "4");
+
 			}
 		});
 
 		five.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"5");
+				ans.setText(ans.getText() + "5");
+
 			}
 		});
 
 		six.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"6");
+				ans.setText(ans.getText() + "6");
+
 			}
 		});
 
 		seven.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"7");
+				ans.setText(ans.getText() + "7");
+
 
 			}
 		});
 
 		eight.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"8");
+				ans.setText(ans.getText() + "8");
 
 			}
 		});
 
 		nine.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"9");
+				ans.setText(ans.getText() + "9");
+
 
 			}
 		});
 
 		zero.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				ans.setText(ans.getText()+"0");
+				ans.setText(ans.getText() + "0");
+
 
 			}
 		});
@@ -146,96 +261,90 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 
-
-                    res2 =Float.parseFloat(String.valueOf(ans.getText()));
-                    if(add==true){
-                    	ans.setText(res1+res2+" ");
-                    	add=false;
-                    }
-				if(subtract==true){
-					ans.setText(res1-res2+"");
-					subtract=false;
-				}
-				if(mul==true){
-					ans.setText(res1*res2+"");
-					mul=false;
-				}
-				if(devides==true){
-					ans.setText(res1/res2+"");
-					devides=false;
+				display.setText(display.getText()+""+ans.getText());
+				String a = null;
+				try {
+					String exp = display.getText().toString();
+					int a1 = evaluate(exp);
+					a = String.valueOf(a1);
+				} catch (Exception e) {
+					Log.e("Error", e.toString());
 				}
 
-
-
+				try {
+					display.setText(display.getText()+"=");
+					equalFalg = true;
+					ans.setText(a);
+				} catch (Exception e) {
+					Log.e("Error", e.toString());
+				}
 			}
+			
 		});
 
 		plus.setOnClickListener(new View.OnClickListener() {
+		//	@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				if (ans.getText() == null) {
-						ans.setText("");
+				if(!equalFalg)
+					display.setText(display.getText()+""+ans.getText() + "+");
+				else {
+					display.setText(ans.getText() + "+");
+					equalFalg = false;
 				}
-					else {
-					res1 = Float.parseFloat(ans.getText()+" ");
-					add = true;
-					ans.setText("");
+				ans.setText("");
 
-					}
+
 
 			}
 		});
 
 		minus.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View view) {
-				if (ans.getText() == null) {
-					ans.setText("");
-				}
+				if(!equalFalg)
+					display.setText(display.getText()+""+ans.getText() + "-");
 				else {
-					res1 = Float.parseFloat(ans.getText()+"");
-					subtract = true;
-					ans.setText(null);
-
+					equalFalg = false;
+					display.setText(ans.getText() + "-");
 				}
-
+				ans.setText("");
 			}
 		});
 
 		devide.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View v) {
-				if (ans.getText() == null) {
-					ans.setText("");
-				}
-				else {
-					res1 = Float.parseFloat(ans.getText()+"");
-					devides = true;
-					ans.setText(null);
-
-				}
+				if (!equalFalg)
+					display.setText(display.getText() + "" + ans.getText() + "/");
+				else{
+					equalFalg = false;
+					display.setText(ans.getText() + "/");
+			}
+				ans.setText("");
 			}
 		});
 
 		multiply.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View v) {
-				if (ans.getText() == null) {
-					ans.setText("");
-				}
+				if(!equalFalg)
+					display.setText(display.getText()+""+ans.getText() + "*");
 				else {
-					res1 = Float.parseFloat(ans.getText()+"");
-					mul = true;
-					ans.setText(null);
-
-				}
+					display.setText(ans.getText() + "*");
+					equalFalg = false;
+				}ans.setText("");
 			}
 		});
 
 		dot.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("SetTextI18n")
 			@Override
 			public void onClick(View v) {
-				ans.setText(ans.getText()+".");
+				ans.setText(ans.getText() + ".");
 
 			}
 		});
@@ -244,9 +353,14 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				int length = ans.getText().length();
-				if(length>0)
-				{
-					ans.getText().delete(length-1,length);
+				if (length > 0) {
+					ans.getText().delete(length - 1, length);
+				}else{
+					int length2 = display.getText().length();
+					String dis = null;
+					if(length2>0)
+						dis = display.getText().toString().substring(0,display.length()-1);
+					    display.setText(dis);
 				}
 
 			}
@@ -256,21 +370,10 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				ans.setText("");
-
+				display.setText("");
 			}
 		});
 
-
-	/*	one.setOnTouchListener(new View.OnTouchListener() {
-			@SuppressLint({"ClickableViewAccessibility", "ResourceAsColor"})
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				one.setBackgroundColor(R.color.green);
-				return false;
-			}
-		});
-
-	 */
 
 		ans.setEnabled(false);
 		ans.addTextChangedListener(new TextWatcher() {
@@ -290,6 +393,9 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 	}
+
+
+
 
 
 }
