@@ -1,7 +1,7 @@
 # Calculator
 
 A simple calculator to perfom basic arithmetic operations for android. <br>
-follows opertor precedence rule
+follows operator precedence rule
 
 ### Software Requirements
 Minimum SDK Version: 16 (Android 4.1(JellyBean))<br>
